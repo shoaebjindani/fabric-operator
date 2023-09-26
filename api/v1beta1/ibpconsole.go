@@ -36,7 +36,7 @@ func (s *IBPConsole) GetMSPID() string {
 }
 
 func (s *IBPConsole) UseTags() bool {
-	useTags := false
+	useTags := true
 	if s.Spec.UseTags != nil && *(s.Spec.UseTags) {
 		useTags = *s.Spec.UseTags
 	}
