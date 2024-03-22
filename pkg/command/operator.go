@@ -26,12 +26,15 @@ import (
 	"runtime"
 	"time"
 
+	"gopkg.in/yaml.v2"
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/operator-framework/operator-lib/leader"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/client-go/kubernetes"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/pkg/errors"
@@ -40,15 +43,18 @@ import (
 	apis "github.com/IBM-Blockchain/fabric-operator/api"
 	ibpv1beta1 "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	controller "github.com/IBM-Blockchain/fabric-operator/controllers"
+	console "github.com/IBM-Blockchain/fabric-operator/defaultconfig/console"
 	oconfig "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/migrator"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	openshiftv1 "github.com/openshift/api/config/v1"
 
 	"k8s.io/apimachinery/pkg/types"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 )
@@ -72,6 +78,7 @@ func printVersion() {
 }
 
 func Operator(operatorCfg *oconfig.Config) error {
+
 	signalHandler := signals.SetupSignalHandler()
 
 	// In local mode, the operator may be launched and debugged directly as a native process without
@@ -154,8 +161,8 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 				"Enabling this will ensure there is only one active controller manager.")
 	}
 	flag.Parse()
-
-	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
+	config := ctrl.GetConfigOrDie()
+	mgr, err := ctrl.NewManager(config, ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
 		Port:               9443,
@@ -170,6 +177,10 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	}
 
 	log.Info("Registering Components.")
+
+	//This Method Checks if MustgatherTag in ibm-hlfsupport-deployer configmap is same as the console tag in the operator
+	// binary (if it is not same, it delete the configmaps ibm-hlfsupport-console-deployer and ibm-hlfsupport-console-console)
+	CheckForFixPacks(config, operatorNamespace)
 
 	// Setup Scheme for all resources
 	if err := apis.AddToScheme(mgr.GetScheme()); err != nil {
@@ -219,6 +230,38 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 			os.Exit(1)
 		}
 	}()
+
+	// // new code added here
+	// kind := "ibpconsoles"
+	// // Create a Kubernetes client
+	// k8sClient, err := client.New(config, client.Options{})
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+
+	// // List CR objects by kind
+
+	// crList := &ibpv1beta1.IBPConsoleList{}
+	// err = k8sClient.List(context.TODO(), crList, &client.ListOptions{
+	// 	Namespace: "ibmsupport",
+	// })
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+
+	// // Filter CR objects by kind
+	// var filteredCRs []client.Object
+	// for _, cr := range crList.Items {
+	// 	if cr.GetObjectKind().GroupVersionKind().Kind == kind {
+	// 		filteredCRs = append(filteredCRs, cr.DeepCopyObject().(client.Object))
+	// 	}
+	// }
+
+	// fmt.Printf("CR Objects of kind %s:\n", kind)
+	// for _, cr := range filteredCRs {
+	// 	fmt.Printf("%s\n", cr.GetName())
+	// }
+	// // new code added ends hre
 
 	if err := InitConfig(operatorNamespace, operatorCfg, mgr.GetAPIReader()); err != nil {
 		log.Error(err, "Invalid configuration")
@@ -296,4 +339,34 @@ func GetOperatorNamespace() (string, error) {
 	}
 
 	return operatorNamespace, nil
+}
+func CheckForFixPacks(config *rest.Config, operatornamespace string) {
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		panic(err)
+	}
+	log.Info(fmt.Sprintf("Latest Console Tag is %s", console.GetImages().ConsoleTag))
+	m, err := util.GetConfigMap(clientset, operatornamespace, "ibm-hlfsupport-console-deployer")
+	data := m.Data
+	yamlstring := data["settings.yaml"]
+	var datamap map[string]interface{}
+	err = yaml.Unmarshal([]byte(yamlstring), &datamap)
+	if err != nil {
+		panic(err)
+	}
+	mustgathertag := ""
+	if otherimages, ok := datamap["otherImages"].(map[interface{}]interface{}); ok {
+		if mustgathertag, ok = otherimages["mustgatherTag"].(string); ok {
+			log.Info(fmt.Sprintf("Value of Mustgather tag is %s:", mustgathertag))
+		} else {
+			log.Info(fmt.Sprintf("Field C is not a string"))
+		}
+	}
+
+	//if the latest console tag and the mustgather tag are not same, then we will delete the below two configmaps
+	if console.GetImages().ConsoleTag != mustgathertag {
+		log.Info(fmt.Sprintf("Console Tag is %s and Mustgater tag is %s", console.GetImages().ConsoleTag, mustgathertag))
+		util.DeleteConfigMapIfExists(clientset, operatornamespace, "ibm-hlfsupport-console-console")
+		util.DeleteConfigMapIfExists(clientset, operatornamespace, "ibm-hlfsupport-console-deployer")
+	}
 }
