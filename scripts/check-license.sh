@@ -1,61 +1,37 @@
 #!/bin/bash
-#
-# Copyright contributors to the Hyperledger Fabric Operator project
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at:
-#
-# 	  http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
 
 cat << EOB > golang_copyright.txt
-/*
- * Copyright contributors to the Hyperledger Fabric Operator project
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- * 	  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/*******************************************************************************
+ * IBM Confidential
+ * OCO Source Materials
+ * 5900-AM9
+ * (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+ * The source code for this program is not  published or otherwise divested of
+ * its trade secrets, irrespective of what has been deposited with
+ * the U.S. Copyright Office.
+ ******************************************************************************/
 
 EOB
 
 cat << EOB > shell_copyright.txt
-#
-# Copyright contributors to the Hyperledger Fabric Operator project
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at:
-#
-# 	  http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
 
 EOB
 
@@ -104,9 +80,9 @@ if [[ -z "$CHECK" ]]; then
    exit 0
 fi
 
-missing=`echo "$CHECK" | xargs ls -d 2>/dev/null | xargs grep -L "SPDX-License-Identifier: Apache-2.0"`
+missing=`echo "$CHECK" | xargs ls -d 2>/dev/null | xargs grep -L "Copyright IBM Corp"`
 if [[ -z "$missing" ]]; then
-   echo "All files have SPDX-License-Identifier: Apache-2.0"
+   echo "All files have Copyright IBM Corp headers"
    exit 0
 fi
 

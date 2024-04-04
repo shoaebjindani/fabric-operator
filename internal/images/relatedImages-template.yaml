@@ -1,0 +1,71 @@
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
+
+  relatedImages:
+    - name: deployer
+      image: deployerDigest
+    - name: ca
+      image: caDigest
+    - name: console
+      image: consoleDigest
+    - name: grpcweb
+      image: grpcwebDigest
+    - name: init
+      image: initDigest
+    - name: crdwebhook
+      image: crdwebhookDigest
+    - name: enroller
+      image: enrollerDigest
+    - name: peer22
+      image: peer22Digest
+    - name: peer24
+      image: peer24Digest
+    - name: peer25
+      image: peer25Digest
+    - name: orderer22
+      image: orderer22Digest
+    - name: orderer24
+      image: orderer24Digest
+    - name: orderer25
+      image: orderer25Digest
+    - name: ccenv22
+      image: ccenv22Digest
+    - name: ccenv24
+      image: ccenv24Digest
+    - name: ccenv25
+      image: ccenv25Digest
+    - name: utilities
+      image: utilitiesDigest
+    - name: goenv22
+      image: goenv22Digest
+    - name: goenv24
+      image: goenv24Digest
+    - name: goenv25
+      image: goenv25Digest
+    - name: nodeenv22
+      image: nodeenv22Digest
+    - name: nodeenv24
+      image: nodeenv24Digest
+    - name: nodeenv25
+      image: nodeenv25Digest
+    - name: javaenv22
+      image: javaenv22Digest
+    - name: javaenv24
+      image: javaenv24Digest
+    - name: javaenv25
+      image: javaenv25Digest
+    - name: chaincode-launcher22
+      image: chaincodeLauncher22Digest
+    - name: chaincode-launcher24
+      image: chaincodeLauncher24Digest
+    - name: couchdbv3
+      image: couchdbv3Digest
+    - name: mustgather
+      image: mustgatherDigest

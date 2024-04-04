@@ -258,7 +258,9 @@ type IBPConsoleStatus struct {
 // +kubebuilder:storageversion
 // +kubebuilder:subresource:status
 // +k8s:deepcopy-gen=true
-// The Console is used to deploy and manage the CA, peer, ordering nodes.
+// The Console is used to deploy and manage the CA, peer, ordering nodes. 
+// Documentation For additional details regarding install parameters check: https://ibm.biz/ibm-hlfsupport-rhm-readme. 
+// By installing this product you accept the license terms https://ibm.biz/ibm-hlfsupport-rhm-license.
 // +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 // +operator-sdk:gen-csv:customresourcedefinitions.displayName="IBP Console"
 // +operator-sdk:gen-csv:customresourcedefinitions.resources=`Deployments,v1,""`

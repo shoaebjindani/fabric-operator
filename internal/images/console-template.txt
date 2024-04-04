@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * IBM Confidential
+ * OCO Source Materials
+ * 5900-AM9
+ * (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+ * The source code for this program is not  published or otherwise divested of
+ * its trade secrets, irrespective of what has been deposited with
+ * the U.S. Copyright Office.
+ ******************************************************************************/
+
+package console
+
+import "github.com/IBM-Blockchain/fabric-operator/pkg/apis/deployer"
+
+// TODO: When public console image name is determined, update publicConsoleImage.
+// TODO: Add logic in digests script to update this file with the correct public and internal console tags.
+const (
+	publicConsoleImage    = "REGISTRY_NAMESPACE-console"
+	publicConsoleTag      = ""
+	publicConsoleDigest   = ""
+
+	internalConsoleImage    = "REGISTRY_NAMESPACE-console"
+	internalConsoleTag      = ""
+	internalConsoleDigest   = ""
+)
+
+var useInternal bool
+
+func SetUseInternal(flag bool) {
+	useInternal = flag
+}
+
+func GetImages() *deployer.ConsoleImages {
+	images := &deployer.ConsoleImages{}
+
+	images.ConsoleImage = publicConsoleImage
+	images.ConsoleTag = publicConsoleTag
+	images.ConsoleDigest = publicConsoleDigest
+
+	if useInternal {
+		images.ConsoleImage = internalConsoleImage
+		images.ConsoleTag = internalConsoleTag
+		images.ConsoleDigest = internalConsoleDigest
+	}
+
+	images.ConsoleInitImage = "REGISTRY_NAMESPACE-init"
+	images.ConsoleInitTag = ""
+	images.ConsoleInitDigest = ""
+	images.ConfigtxlatorImage = "REGISTRY_NAMESPACE-utilities"
+	images.ConfigtxlatorTag = ""
+	images.ConfigtxlatorDigest = ""
+	images.DeployerImage = "REGISTRY_NAMESPACE-deployer"
+	images.DeployerTag = ""
+	images.DeployerDigest = ""
+	images.CouchDBImage = "REGISTRY_NAMESPACE-couchdb"
+	images.CouchDBTag = ""
+	images.CouchDBDigest = ""
+	images.MustgatherImage = "REGISTRY_NAMESPACE-mustgather"
+	images.MustgatherTag = ""
+	images.MustgatherDigest = ""
+
+	return images
+}

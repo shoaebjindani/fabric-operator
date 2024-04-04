@@ -14,4 +14,4 @@ scorecard:
           - "config/samples/ibp.com_v1beta1_ibpconsole.yaml"
           - "config/samples/ibp.com_v1beta1_ibppeer.yaml"
           - "config/samples/ibp.com_v1beta1_ibporderer.yaml"
-        csv-path: "config/manifests/bases/fabric-opensource-operator.clusterserviceversion.yaml"
+        csv-path: "config/manifests/bases/ibm-hlfsupport.clusterserviceversion.yaml"

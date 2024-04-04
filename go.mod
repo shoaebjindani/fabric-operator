@@ -22,7 +22,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.7.0
 	github.com/vrischmann/envconfig v1.3.0
-	go.uber.org/zap v1.26.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.21.5
 	k8s.io/apiextensions-apiserver v0.21.5
@@ -112,6 +111,7 @@ require (
 	github.com/zmap/zcrypto v0.0.0-20190729165852-9051775e6a2e // indirect
 	github.com/zmap/zlint v0.0.0-20190806154020-fd021b4cfbeb // indirect
 	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.20.0 // indirect

@@ -16,12 +16,12 @@ import "github.com/IBM-Blockchain/fabric-operator/pkg/apis/deployer"
 // TODO: Add logic in digests script to update this file with the correct public and internal console tags.
 const (
 	publicConsoleImage  = "ibm-hlfsupport-console"
-	publicConsoleTag    = "1.0.9-20240402-amd64"
-	publicConsoleDigest = "sha256:f4fc81db6fff37bf494af8d3cd564741b5fe169240b44807710edc4000983af8"
+	publicConsoleTag    = "1.0.0-20220208"
+	publicConsoleDigest = "sha256:2cf4cbefa0c8dc42660fcbf6a7859d14216804c18e2097c2c5cb51c83cb3cfd0"
 
 	internalConsoleImage  = "ibm-hlfsupport-console"
-	internalConsoleTag    = "1.0.9-20240402-amd64"
-	internalConsoleDigest = "sha256:f4fc81db6fff37bf494af8d3cd564741b5fe169240b44807710edc4000983af8"
+	internalConsoleTag    = "1.0.0-20220208"
+	internalConsoleDigest = "sha256:2cf4cbefa0c8dc42660fcbf6a7859d14216804c18e2097c2c5cb51c83cb3cfd0"
 )
 
 var useInternal bool
@@ -44,20 +44,20 @@ func GetImages() *deployer.ConsoleImages {
 	}
 
 	images.ConsoleInitImage = "ibm-hlfsupport-init"
-	images.ConsoleInitTag = "1.0.9-20240402-amd64"
-	images.ConsoleInitDigest = "sha256:777f7fdcc2df5b098cf5fc216deaf8a5daec0d1ef9c2322720e653cf5a95df5e"
+	images.ConsoleInitTag = "1.0.0-20220208"
+	images.ConsoleInitDigest = "sha256:4a7e8b579646f970278cb42acfd78f681008786055a46ea0f4ebab5e23871308"
 	images.ConfigtxlatorImage = "ibm-hlfsupport-utilities"
-	images.ConfigtxlatorTag = "2.5.6-20240402-amd64"
-	images.ConfigtxlatorDigest = "sha256:d80dc71a1b063d076686bd9ae457db7f141c08bd6d8ddc67aa4d9bac32a47112"
+	images.ConfigtxlatorTag = "2.2.5-20220208"
+	images.ConfigtxlatorDigest = "sha256:6e23a31026277ec2be2b0cd05be1df963e4776b6f0779067af4fd4a6f4dcce2c"
 	images.DeployerImage = "ibm-hlfsupport-deployer"
-	images.DeployerTag = "1.0.9-20240402-amd64"
-	images.DeployerDigest = "sha256:a580370ed4d56d45a0989e5a984ab27facae3d5fa1d50697d2e55444a8b55791"
+	images.DeployerTag = "1.0.0-20220208"
+	images.DeployerDigest = "sha256:efe05c7271506725d42f09decc3c802c61ac73d9e7d8b46388245ed2b05b0dfd"
 	images.CouchDBImage = "ibm-hlfsupport-couchdb"
-	images.CouchDBTag = "3.3.3-20240402-amd64"
-	images.CouchDBDigest = "sha256:89dad7f96725694cd1a58c7ff74b4a4f1dd30cc38582364eefaf26c597d52ae0"
+	images.CouchDBTag = "2.3.1-20220208"
+	images.CouchDBDigest = "sha256:8d7030f9db57a41e928334948840132942c91acf09c1bdb1eec0b22925be9e67"
 	images.MustgatherImage = "ibm-hlfsupport-mustgather"
-	images.MustgatherTag = "1.0.9-20240402-amd64"
-	images.MustgatherDigest = "sha256:1e27aece68ad697b2772933696a2863e9b2198bd9ecd0ff3f7a2329d33b6ab08"
+	images.MustgatherTag = "1.0.0-20220208"
+	images.MustgatherDigest = "sha256:32eef6bcfe23fcebc086fa9882ec600780530498aac96bc419974669d7f41f34"
 
 	return images
 }

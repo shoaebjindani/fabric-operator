@@ -1,0 +1,268 @@
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ibpconsole-deployer-template
+data:
+  settings.yaml: |
+    db:
+      connectionurl: "http://localhost:5984"
+      createdb: true
+      components:
+        name: "components"
+        designdocs:
+        - ./designdocs/components/service_broker.json
+        - ./designdocs/components/deployer.json
+        - ./designdocs/components/plutus.json
+        - ./designdocs/components/search_indices.json
+    port: 8080
+    loglevel: debug
+    tls:
+      enabled: false
+      certpath: /certs/tls.crt
+      keypath: /certs/tls.key
+    auth:
+      username: dev
+      password: dev123
+    imagePullSecret: ""
+    versions:
+      ca:
+        1.5.9-2:
+          default: true
+          version: 1.5.9-2
+          image:
+            caInitImage: REGISTRY_NAMESPACE-init
+            caInitTag: 
+            caInitDigest: 
+            caImage: REGISTRY_NAMESPACE-ca
+            caTag: 
+            caDigest: 
+            enrollerImage: REGISTRY_NAMESPACE-enroller
+            enrollerTag: 
+            enrollerDigest: 
+      peer:
+        2.2.15-2:
+          default: true
+          version: 2.2.15-2
+          image:
+            peerInitImage: REGISTRY_NAMESPACE-init
+            peerInitTag: 
+            peerInitDigest: 
+            peerImage: REGISTRY_NAMESPACE-peer
+            peerTag: peer22tag
+            peerDigest: peer22digest
+            couchdbImage: REGISTRY_NAMESPACE-couchdb
+            couchdbTag: couchdb312tag
+            couchdbDigest: couchdb312digest
+            grpcwebImage: REGISTRY_NAMESPACE-grpcweb
+            grpcwebTag: 
+            grpcwebDigest: 
+            chaincodeLauncherImage: REGISTRY_NAMESPACE-chaincode-launcher
+            chaincodeLauncherTag: ccbuilder22tag
+            chaincodeLauncherDigest: ccbuilder22digest
+            builderImage: REGISTRY_NAMESPACE-ccenv
+            builderTag: ccenv22tag
+            builderDigest: ccenv22digest
+            goEnvImage: REGISTRY_NAMESPACE-goenv
+            goEnvTag: goenv22tag
+            goEnvDigest: goenv22digest
+            javaEnvImage: REGISTRY_NAMESPACE-javaenv
+            javaEnvTag: javaenv22tag
+            javaEnvDigest: javaenv22digest
+            nodeEnvImage: REGISTRY_NAMESPACE-nodeenv
+            nodeEnvTag: nodeenv22tag
+            nodeEnvDigest: nodeenv22digest
+            enrollerImage: REGISTRY_NAMESPACE-enroller
+            enrollerTag: 
+            enrollerDigest: 
+        2.5.6-2:
+          default: false
+          version: 2.5.6-2
+          image:
+            peerInitImage: REGISTRY_NAMESPACE-init
+            peerInitTag: 
+            peerInitDigest: 
+            peerImage: REGISTRY_NAMESPACE-peer
+            peerTag: peer25tag
+            peerDigest: peer25digest
+            couchdbImage: REGISTRY_NAMESPACE-couchdb
+            couchdbTag: couchdb312tag
+            couchdbDigest: couchdb312digest
+            grpcwebImage: REGISTRY_NAMESPACE-grpcweb
+            grpcwebTag: 
+            grpcwebDigest: 
+            chaincodeLauncherImage: REGISTRY_NAMESPACE-chaincode-launcher
+            chaincodeLauncherTag: ccbuilder25tag
+            chaincodeLauncherDigest: ccbuilder25digest
+            builderImage: REGISTRY_NAMESPACE-ccenv
+            builderTag: ccenv25tag
+            builderDigest: ccenv25digest
+            goEnvImage: REGISTRY_NAMESPACE-goenv
+            goEnvTag: goenv25tag
+            goEnvDigest: goenv25digest
+            javaEnvImage: REGISTRY_NAMESPACE-javaenv
+            javaEnvTag: javaenv25tag
+            javaEnvDigest: javaenv25digest
+            nodeEnvImage: REGISTRY_NAMESPACE-nodeenv
+            nodeEnvTag: nodeenv25tag
+            nodeEnvDigest: nodeenv25digest
+            enrollerImage: REGISTRY_NAMESPACE-enroller
+            enrollerTag: 
+            enrollerDigest:  
+      orderer:
+        2.2.15-2:
+          default: true
+          version: 2.2.15-2
+          image:
+            ordererInitImage: REGISTRY_NAMESPACE-init
+            ordererInitTag: 
+            ordererInitDigest: 
+            ordererImage: REGISTRY_NAMESPACE-orderer
+            ordererTag: orderer22tag
+            ordererDigest: orderer22digest
+            grpcwebImage: REGISTRY_NAMESPACE-grpcweb
+            grpcwebTag: 
+            grpcwebDigest: 
+            enrollerImage: REGISTRY_NAMESPACE-enroller
+            enrollerTag: 
+            enrollerDigest: 
+        2.5.6-2:
+          default: false
+          version: 2.5.6-2
+          image:
+            ordererInitImage: REGISTRY_NAMESPACE-init
+            ordererInitTag: 
+            ordererInitDigest: 
+            ordererImage: REGISTRY_NAMESPACE-orderer
+            ordererTag: orderer25tag
+            ordererDigest: orderer25digest
+            grpcwebImage: REGISTRY_NAMESPACE-grpcweb
+            grpcwebTag: 
+            grpcwebDigest: 
+            enrollerImage: REGISTRY_NAMESPACE-enroller
+            enrollerTag: 
+            enrollerDigest: 
+    defaults:
+      storage:
+        ca:
+          ca:
+            size: 1Gi
+            class: ""
+        peer:
+          statedb:
+            size: 10Gi
+            class: ""
+          peer:
+            size: 10Gi
+            class: ""
+        orderer:
+          orderer:
+            size: 10Gi
+            class: ""
+      resources:
+        ca:
+          ca:
+            limits:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 100M
+          init:
+            limits:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 100M
+        peer:
+          peer:
+            limits:
+              cpu: 200m
+              memory: 400M
+            requests:
+              cpu: 200m
+              memory: 400M
+          fluentd:
+            limits:
+              cpu: 100m
+              memory: 200M
+            requests:
+              cpu: 100m
+              memory: 200M
+          couchdb:
+            limits:
+              cpu: 200m
+              memory: 400M
+            requests:
+              cpu: 200m
+              memory: 400M
+          dind:
+            limits:
+              cpu: 500m
+              memory: 1000M
+            requests:
+              cpu: 500m
+              memory: 1000M
+          proxy:
+            limits:
+              cpu: 100m
+              memory: 200M
+            requests:
+              cpu: 100m
+              memory: 200M
+          init:
+            limits:
+              cpu: 100m
+              memory: 200M
+            requests:
+              cpu: 100m
+              memory: 200M
+          chaincodelauncher:
+            limits:
+              cpu: 200m
+              memory: 400M
+            requests:
+              cpu: 200m
+              memory: 400M
+        orderer:
+          orderer:
+            limits:
+              cpu: 250m
+              memory: 500M
+              ephemeral-storage: 1G
+            requests:
+              cpu: 250m
+              memory: 500M
+              ephemeral-storage: 100M
+          proxy:
+            limits:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 100M
+          init:
+            limits:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 200M
+              ephemeral-storage: 100M

@@ -1,20 +1,12 @@
-#
-# Copyright contributors to the Hyperledger Fabric Operator project
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at:
-#
-# 	  http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
 
 ###############################################################################
 #
@@ -81,14 +73,14 @@ peer:
         # MinInterval is the minimum permitted time between client pings.
         # If clients send pings more frequently, the peer server will
         # disconnect them
-        ## Changing defaults to 25s to fix connection issues with VPC clusters
+        ## IBP changes this from 60s to 25s.
         minInterval: 25s
         # Client keepalive settings for communicating with other peer nodes
         client:
             # Interval is the time between pings to peer nodes.  This must
             # greater than or equal to the minInterval specified by peer
             # nodes
-            ## Changing defaults to 30s to fix connection issues with VPC clusters
+            ## IBP changes this from 60s to 30s.
             interval: 30s
             # Timeout is the duration the client waits for a response from
             # peer nodes before closing the connection
@@ -99,7 +91,7 @@ peer:
             # Interval is the time between pings to ordering nodes.  This must
             # greater than or equal to the minInterval specified by ordering
             # nodes.
-            ## Changing defaults to 30s to fix connection issues with VPC clusters
+            ## IBP changes this from 60s to 30s.
             interval: 30s
             # Timeout is the duration the client waits for a response from
             # ordering nodes before closing the connection
@@ -370,6 +362,7 @@ peer:
         # via gossip.
         # Note that 'gossip.state.enabled' controls point to point block replication
         # of blocks committed in the past.
+        # ibp defaults changed from true to false
         blockGossipEnabled: false
 
         # It sets the total time the delivery service may spend in reconnection
@@ -599,15 +592,15 @@ chaincode:
     # builders in the order specified below.
     # ibp updates this with ibp related values
     externalBuilders:
-
-        # Default builder for "k8s" chaincode packages.
-        # See https://github.com/hyperledgendary/fabric-builder-k8s
-      - name: k8s_builder
-        path: /opt/hyperledger/k8s_builder
+      - name: ibp-builder
+        path: /usr/local
+        environmentWhitelist:
+          - IBP_BUILDER_ENDPOINT
+          - IBP_BUILDER_SHARED_DIR
         propagateEnvironment:
-          - CORE_PEER_ID
-          - KUBERNETES_SERVICE_HOST
-          - KUBERNETES_SERVICE_PORT
+          - IBP_BUILDER_ENDPOINT
+          - IBP_BUILDER_SHARED_DIR
+          - PEER_NAME
 
         # Default builder for chaincode-as-a-service, included in fabric
         # opensource versions >= 2.4.2.  This is a "no-op" builder and will not

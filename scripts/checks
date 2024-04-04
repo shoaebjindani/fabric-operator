@@ -1,0 +1,36 @@
+#!/bin/bash
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
+
+# Need to run this before go vet
+go mod download
+
+echo "Running 'go vet'"
+OUTPUT=`go vet -all ./... 2>&1`
+if [ -n "$OUTPUT" ]; then
+    echo "The following files contain go vet errors"
+    echo $OUTPUT
+    exit 1
+fi
+echo "No 'go vet' issues found"
+
+cd /tmp
+go install golang.org/x/tools/cmd/goimports@latest
+cd -
+echo "Checking imports ..."
+found=`goimports -l \`find . -path ./vendor -prune -o -name "*.go" -print\` 2>&1`
+found=$(echo "$found" | grep -v generated)
+if [ "$found" != "" ]; then
+   echo "The following files have import problems:"
+   echo "$found"
+   echo "You may run 'goimports -w <file>' to fix each file."
+   exit 1
+fi
+echo "All files are properly formatted"

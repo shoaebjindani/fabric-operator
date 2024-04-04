@@ -1,5 +1,4 @@
-#!/bin/bash -e
-
+#!/bin/bash
 #*******************************************************************************
 # IBM Confidential
 # OCO Source Materials
@@ -10,9 +9,13 @@
 # the U.S. Copyright Office.
 #*******************************************************************************
 
-if [ ! -f ${PWD}/bin/fabric-ca-client ] || [ ! -f ${PWD}/bin/peer ] ; then
-    echo -e "\n\n======= Downloaing Fabric & Fabric-CA Binaries  =========\n"
-    curl -sSL http://bit.ly/2ysbOFE | bash -s ${FABRIC_VERSION} ${FABRIC_CA_VERSION} -d -s
-else
-    echo -e "\n\n======= Fabric Binaries already exists, Skipping download =========\n"
-fi
+function getKubectl {
+    if ! kubectl_loc="$(type -p "kubectl")" || [[ -z $kubectl_loc ]]; then
+        echo "Get kubectl"
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.2/bin/linux/amd64/kubectl
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+    fi
+}
+
+getKubectl

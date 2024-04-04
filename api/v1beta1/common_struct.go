@@ -189,7 +189,7 @@ type CRN struct {
 // License should be accepted to install custom resources
 // +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 type License struct {
-	// Accept should be set to true to accept the license.
+	// Accept should be set to true to accept the license. https://ibm.biz/ibm-hlfsupport-rhm-license
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors.x-descriptors="urn:alm:descriptor:com.tectonic.ui:checkbox"
 	// +kubebuilder:validation:Enum=true

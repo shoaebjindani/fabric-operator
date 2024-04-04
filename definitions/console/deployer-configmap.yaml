@@ -1,20 +1,12 @@
-#
-# Copyright contributors to the Hyperledger Fabric Operator project
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at:
-#
-# 	  http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+#*******************************************************************************
+# IBM Confidential
+# OCO Source Materials
+# 5900-AM9
+# (C) Copyright IBM Corp. 2020-2024 All Rights Reserved.
+# The source code for this program is not  published or otherwise divested of
+# its trade secrets, irrespective of what has been deposited with
+# the U.S. Copyright Office.
+#*******************************************************************************
 
 apiVersion: v1
 kind: ConfigMap
@@ -41,44 +33,124 @@ data:
     auth:
       username: dev
       password: dev123
-
     imagePullSecret: ""
     versions:
       ca:
-        1.5.3-1:
+        1.5.9-2:
           default: true
-          version: 1.5.3-1
+          version: 1.5.9-2
           image:
-            caInitImage: registry.access.redhat.com/ubi8/ubi-minimal
-            caInitTag: latest
-            caImage: hyperledger/fabric-ca
-            caTag: 1.5.3
-
+            caInitImage: ibm-hlfsupport-init
+            caInitTag: 1.0.9-20240402-amd64
+            caInitDigest: sha256:777f7fdcc2df5b098cf5fc216deaf8a5daec0d1ef9c2322720e653cf5a95df5e
+            caImage: ibm-hlfsupport-ca
+            caTag: 1.5.9-20240402-amd64
+            caDigest: sha256:38bddc3dae5d09d86fc45dc03e727d3d108e8dfa39957dd23dccd88e3aa7c4df
+            enrollerImage: ibm-hlfsupport-enroller
+            enrollerTag: 1.0.9-20240402-amd64
+            enrollerDigest: sha256:b370d138832fd9ae771ecbe9a47ce5f6e7f106bd4b636cb5c3349839672b022b
       peer:
-        2.4.3-1:
+        2.2.15-2:
           default: true
-          version: 2.4.3-1
+          version: 2.2.15-2
           image:
-            peerInitImage: registry.access.redhat.com/ubi8/ubi-minimal
-            peerInitTag: latest
-            peerImage: hyperledger/fabric-peer
-            peerTag: 2.4.3
-            couchdbImage: couchdb
-            couchdbTag: 3.2.2
-            grpcwebImage: ghcr.io/hyperledger-labs/grpc-web
-            grpcwebTag: latest
+            peerInitImage: ibm-hlfsupport-init
+            peerInitTag: 1.0.9-20240402-amd64
+            peerInitDigest: sha256:777f7fdcc2df5b098cf5fc216deaf8a5daec0d1ef9c2322720e653cf5a95df5e
+            peerImage: ibm-hlfsupport-peer
+            peerTag: 2.2.15-20240402-amd64
+            peerDigest: sha256:bd0b79212dd2baed3caba6f8bb4596657206a5aa97eb2ce3158e1a89d87c6a4a
+            couchdbImage: ibm-hlfsupport-couchdb
+            couchdbTag: 3.3.3-20240402-amd64
+            couchdbDigest: sha256:89dad7f96725694cd1a58c7ff74b4a4f1dd30cc38582364eefaf26c597d52ae0
+            grpcwebImage: ibm-hlfsupport-grpcweb
+            grpcwebTag: 1.0.9-20240402-amd64
+            grpcwebDigest: sha256:1604727deda11513c1aa3e36ae08ea09eb4e7c522b4972883eaffcd3089e0476
+            chaincodeLauncherImage: ibm-hlfsupport-chaincode-launcher
+            chaincodeLauncherTag: 2.2.15-20240402-amd64
+            chaincodeLauncherDigest: sha256:7d80087b217e3cb13d6541dca509b9ed382097ce3947aefd869976a346de47cf
+            builderImage: ibm-hlfsupport-ccenv
+            builderTag: 2.2.15-20240402-amd64
+            builderDigest: sha256:d96fbe7ff58b08497ac0e561fa0e4fcf775bae3d3291f80eab8a61bb30f9dd41
+            goEnvImage: ibm-hlfsupport-goenv
+            goEnvTag: 2.2.15-20240402-amd64
+            goEnvDigest: sha256:ad18e28e8ccab034a0d1867ab00a916a525f57f6c4447b369221e73aee3b5dcd
+            javaEnvImage: ibm-hlfsupport-javaenv
+            javaEnvTag: 2.2.15-20240402-amd64
+            javaEnvDigest: sha256:24a2867a0991d2ade0f9ca9b527c8c8605891c24c3b53e1b02aebb812f2867f5
+            nodeEnvImage: ibm-hlfsupport-nodeenv
+            nodeEnvTag: 2.2.15-20240402-amd64
+            nodeEnvDigest: sha256:0ed4689447083dd5d18fdf41cf3d96eb23a8f19922c7250038e2b2842eed46a8
+            enrollerImage: ibm-hlfsupport-enroller
+            enrollerTag: 1.0.9-20240402-amd64
+            enrollerDigest: sha256:b370d138832fd9ae771ecbe9a47ce5f6e7f106bd4b636cb5c3349839672b022b
+        2.5.6-2:
+          default: false
+          version: 2.5.6-2
+          image:
+            peerInitImage: ibm-hlfsupport-init
+            peerInitTag: 1.0.9-20240402-amd64
+            peerInitDigest: sha256:777f7fdcc2df5b098cf5fc216deaf8a5daec0d1ef9c2322720e653cf5a95df5e
+            peerImage: ibm-hlfsupport-peer
+            peerTag: 2.5.6-20240402-amd64
+            peerDigest: sha256:ba521fd506c545c0c7672b5004d1f91e4ec18c1fd79516357d944335bdf248d7
+            couchdbImage: ibm-hlfsupport-couchdb
+            couchdbTag: 3.3.3-20240402-amd64
+            couchdbDigest: sha256:89dad7f96725694cd1a58c7ff74b4a4f1dd30cc38582364eefaf26c597d52ae0
+            grpcwebImage: ibm-hlfsupport-grpcweb
+            grpcwebTag: 1.0.9-20240402-amd64
+            grpcwebDigest: sha256:1604727deda11513c1aa3e36ae08ea09eb4e7c522b4972883eaffcd3089e0476
+            chaincodeLauncherImage: ibm-hlfsupport-chaincode-launcher
+            chaincodeLauncherTag: 2.5.6-20240402-amd64
+            chaincodeLauncherDigest: sha256:daac14e557a328555bafb0a185679c8b0cab7b5663898bb2a2b88c6383f5cafa
+            builderImage: ibm-hlfsupport-ccenv
+            builderTag: 2.5.6-20240402-amd64
+            builderDigest: sha256:e09f1e5711776ee01948332056b90fe553a58d1f48f733c41e563bb7b403a910
+            goEnvImage: ibm-hlfsupport-goenv
+            goEnvTag: 2.5.6-20240402-amd64
+            goEnvDigest: sha256:b57459109d3346788d3520542ab1b3424858e2d5ec55dd1eb4cad919aebdc6d2
+            javaEnvImage: ibm-hlfsupport-javaenv
+            javaEnvTag: 2.5.6-20240402-amd64
+            javaEnvDigest: sha256:21e49a7792d2486cd86346736bfaafd4763bc746a6508addef6374efe3aa7abf
+            nodeEnvImage: ibm-hlfsupport-nodeenv
+            nodeEnvTag: 2.5.6-20240402-amd64
+            nodeEnvDigest: sha256:b94d376a8d97ae8088d0100fbe239d2e85ef0238c217e2471d6db478061f6f54
+            enrollerImage: ibm-hlfsupport-enroller
+            enrollerTag: 1.0.9-20240402-amd64
+            enrollerDigest: sha256:b370d138832fd9ae771ecbe9a47ce5f6e7f106bd4b636cb5c3349839672b022b
       orderer:
-        2.4.3-1:
+        2.2.15-2:
           default: true
-          version: 2.4.3-1
+          version: 2.2.15-2
           image:
-            ordererInitImage: registry.access.redhat.com/ubi8/ubi-minimal
-            ordererInitTag: latest
-            ordererImage: hyperledger/fabric-orderer
-            ordererTag: 2.4.3
-            grpcwebImage: ghcr.io/hyperledger-labs/grpc-web
-            grpcwebTag: latest
-
+            ordererInitImage: ibm-hlfsupport-init
+            ordererInitTag: 1.0.9-20240402-amd64
+            ordererInitDigest: sha256:777f7fdcc2df5b098cf5fc216deaf8a5daec0d1ef9c2322720e653cf5a95df5e
+            ordererImage: ibm-hlfsupport-orderer
+            ordererTag: 2.2.15-20240402-amd64
+            ordererDigest: sha256:55e5ea874f4e945d950a0d3015c6e0bde51e865190231b798d5b1b6032d78b91
+            grpcwebImage: ibm-hlfsupport-grpcweb
+            grpcwebTag: 1.0.9-20240402-amd64
+            grpcwebDigest: sha256:1604727deda11513c1aa3e36ae08ea09eb4e7c522b4972883eaffcd3089e0476
+            enrollerImage: ibm-hlfsupport-enroller
+            enrollerTag: 1.0.9-20240402-amd64
+            enrollerDigest: sha256:b370d138832fd9ae771ecbe9a47ce5f6e7f106bd4b636cb5c3349839672b022b
+        2.5.6-2:
+          default: false
+          version: 2.5.6-2
+          image:
+            ordererInitImage: ibm-hlfsupport-init
+            ordererInitTag: 1.0.9-20240402-amd64
+            ordererInitDigest: sha256:777f7fdcc2df5b098cf5fc216deaf8a5daec0d1ef9c2322720e653cf5a95df5e
+            ordererImage: ibm-hlfsupport-orderer
+            ordererTag: 2.5.6-20240402-amd64
+            ordererDigest: sha256:19a22accbf6f683256d4398c8f545332b38037ee477f02af0a58fd0304d11d57
+            grpcwebImage: ibm-hlfsupport-grpcweb
+            grpcwebTag: 1.0.9-20240402-amd64
+            grpcwebDigest: sha256:1604727deda11513c1aa3e36ae08ea09eb4e7c522b4972883eaffcd3089e0476
+            enrollerImage: ibm-hlfsupport-enroller
+            enrollerTag: 1.0.9-20240402-amd64
+            enrollerDigest: sha256:b370d138832fd9ae771ecbe9a47ce5f6e7f106bd4b636cb5c3349839672b022b
     defaults:
       storage:
         ca:
@@ -124,6 +196,13 @@ data:
             requests:
               cpu: 200m
               memory: 400M
+          fluentd:
+            limits:
+              cpu: 100m
+              memory: 200M
+            requests:
+              cpu: 100m
+              memory: 200M
           couchdb:
             limits:
               cpu: 200m
@@ -131,6 +210,13 @@ data:
             requests:
               cpu: 200m
               memory: 400M
+          dind:
+            limits:
+              cpu: 500m
+              memory: 1000M
+            requests:
+              cpu: 500m
+              memory: 1000M
           proxy:
             limits:
               cpu: 100m

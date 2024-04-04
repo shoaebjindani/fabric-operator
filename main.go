@@ -19,6 +19,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -27,6 +29,7 @@ import (
 	cainit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca"
 	ordererinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer"
 	peerinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
@@ -37,6 +40,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	ibpv1beta1 "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -49,7 +53,6 @@ const (
 )
 
 var log = logf.Log.WithName("cmd")
-
 var (
 	scheme   = runtime.NewScheme()
 	setupLog = ctrl.Log.WithName("setup")
@@ -71,6 +74,14 @@ func main() {
 	setDefaultConsoleDefinitions(operatorCfg)
 
 	operatorCfg.Operator.SetDefaults()
+
+	zaplogger, err := util.SetupLogging("DEBUG")
+	operatorCfg.Logger = zaplogger
+	if err != nil {
+		fmt.Print("error initiating the logger", err)
+		fmt.Print("Will exit Operator", err)
+		os.Exit(1)
+	}
 
 	if err := command.Operator(operatorCfg); err != nil {
 		log.Error(err, "failed to start operator")

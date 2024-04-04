@@ -1,7 +1,7 @@
 domain: ibp.com
 layout: go.kubebuilder.io/v3
 repo: github.com/IBM-Blockchain/fabric-operator
-projectName: fabric-opensource-operator
+projectName: ibm-hlfsupport
 resources:
   - controller: true
     domain: ibp.com
