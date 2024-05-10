@@ -16,7 +16,7 @@ require (
 	github.com/lib/pq v1.8.0
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.2.3
 	github.com/onsi/ginkgo/v2 v2.13.2
-	github.com/onsi/gomega v1.31.0
+	github.com/onsi/gomega v1.33.1
 	github.com/openshift/api v3.9.1-0.20190924102528-32369d4db2ad+incompatible
 	github.com/operator-framework/operator-lib v0.8.0
 	github.com/pkg/errors v0.9.1

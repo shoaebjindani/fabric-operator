@@ -344,37 +344,29 @@ func GetOperatorNamespace() (string, error) {
 
 	return operatorNamespace, nil
 }
-func CheckForFixPacks(config *rest.Config, operatornamespace string) {
+func CheckForFixPacks(config *rest.Config, operatornamespace string) error {
 	clientset, err := kubernetes.NewForConfig(config)
 
-	// Create a dynamic client
 	dynamicClient := dynamic.NewForConfigOrDie(config)
 
-	// Define your custom resource type
-	//customResourceName := "ibpconsoles"
-	//customResourceNamespace := "ibmsupport"
 	gvr := schema.GroupVersionResource{
 		Group:    "ibp.com",
 		Version:  "v1beta1",
 		Resource: "ibpconsoles",
 	}
 
-	// Retrieve the list of objects in your custom resource
 	list, err := dynamicClient.Resource(gvr).Namespace(operatornamespace).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
 
 	var consoleObjectName string
-	// Print the names of all objects
 	for _, obj := range list.Items {
 
 		consoleObjectName = obj.GetName()
-		// If you want to do something with the object, you can access it here
 
 	}
 	log.Info(fmt.Sprintf("Latest Console Tag is %s", console.GetImages().ConsoleTag))
-
 	// get the console deployment here
 
 	// Retrieve the deployment
@@ -388,15 +380,25 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 
 	//if the latest console tag and the mustgather tag are not same, then we will delete the below two configmaps
 	if console.GetImages().ConsoleTag != existingConsoleDeploymentImageTag {
-		log.Info(fmt.Sprintf("Will Start Applying the Fixpacks Existing Version %s to New Version %s ", existingConsoleDeploymentImageTag, console.GetImages().ConsoleTag))
+		log.Info(fmt.Sprintf("Console Tag is %s and Mustgater tag is %s", console.GetImages().ConsoleTag, existingConsoleDeploymentImageTag))
 
 		// set the webhook image here as well
 		// Specify deployment namespace and name
-		namespace := "ibm-hlfsupport-infra"
-		deploymentName := "ibm-hlfsupport-webhook"
+
+		webhooknamespace, err := GetNamespaceEndingWith(clientset, "-infra")
+		webhookeploymentname := ""
+		if err != nil {
+			webhookeploymentname, err = GetDeploymentEndingWithInNamespace(clientset, webhooknamespace, "-webhook")
+		}
+
+		if err == nil {
+			log.Error(err, "Failed to get operator namespace")
+			time.Sleep(15 * time.Second)
+			return err
+		}
 
 		// Retrieve the deployment
-		deployment, err := clientset.AppsV1().Deployments(namespace).Get(context.TODO(), deploymentName, v1.GetOptions{})
+		deployment, err := clientset.AppsV1().Deployments(webhooknamespace).Get(context.TODO(), webhookeploymentname, v1.GetOptions{})
 		if err != nil {
 			panic(err.Error())
 		}
@@ -406,7 +408,7 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 		deployment.Spec.Template.Spec.Containers[0].Image = existingwebhookimage
 
 		// Update the deployment
-		_, err = clientset.AppsV1().Deployments(namespace).Update(context.TODO(), deployment, v1.UpdateOptions{})
+		_, err = clientset.AppsV1().Deployments(webhooknamespace).Update(context.TODO(), deployment, v1.UpdateOptions{})
 		if err != nil {
 			panic(err.Error())
 		}
@@ -418,6 +420,8 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 		log.Info("Looks like the operator was restarted...")
 	}
 
+	return nil
+
 }
 
 func containsString(slice []metav1.GroupVersionForDiscovery, s string) bool {
@@ -427,4 +431,39 @@ func containsString(slice []metav1.GroupVersionForDiscovery, s string) bool {
 		}
 	}
 	return false
+}
+
+func GetNamespaceEndingWith(clientset *kubernetes.Clientset, suffix string) (string, error) {
+	// List namespaces.
+	namespaces, err := clientset.CoreV1().Namespaces().List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		return "", err
+	}
+
+	// Find the namespace that ends with the specified suffix.
+	var matchingNamespace string
+	for _, ns := range namespaces.Items {
+		if strings.HasSuffix(ns.Name, suffix) {
+			matchingNamespace = ns.Name
+			break
+		}
+	}
+	return matchingNamespace, nil
+}
+func GetDeploymentEndingWithInNamespace(clientset *kubernetes.Clientset, namespace, suffix string) (string, error) {
+	// List deployments in the specified namespace.
+	deployments, err := clientset.AppsV1().Deployments(namespace).List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		return "", err
+	}
+
+	// Find the deployment that ends with the specified suffix.
+	var matchingDeployment string
+	for _, deployment := range deployments.Items {
+		if strings.HasSuffix(deployment.Name, suffix) {
+			matchingDeployment = deployment.Name
+			break
+		}
+	}
+	return matchingDeployment, nil
 }
