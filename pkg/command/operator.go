@@ -182,9 +182,12 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 
 	log.Info("Registering Components.")
 
-	//This Method Checks if MustgatherTag in ibm-hlfsupport-deployer configmap is same as the console tag in the operator
-	// binary (if it is not same, it delete the configmaps ibm-hlfsupport-console-deployer and ibm-hlfsupport-console-console)
-	CheckForFixPacks(config, operatorNamespace)
+	// This method checks if the deployment tag in console is same as Console tag provided in Operator Binary if not, it applies the fixpacks
+	err = CheckForFixPacks(config, operatorNamespace)
+	if err := CheckForFixPacks(config, operatorNamespace); err != nil {
+		log.Error(err, "")
+		return err
+	}
 
 	// Setup Scheme for all resources
 	if err := apis.AddToScheme(mgr.GetScheme()); err != nil {
@@ -357,7 +360,8 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) error {
 
 	list, err := dynamicClient.Resource(gvr).Namespace(operatornamespace).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
-		panic(err.Error())
+		log.Error(err, "Failed to get Console Object List ")
+		return err
 	}
 
 	var consoleObjectName string
@@ -372,7 +376,8 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) error {
 	// Retrieve the deployment
 	deployment, err := clientset.AppsV1().Deployments(operatornamespace).Get(context.TODO(), consoleObjectName, v1.GetOptions{})
 	if err != nil {
-		panic(err.Error())
+		log.Error(err, "Failed to get Console Deployment ")
+		return err
 	}
 	existingConsoleDeploymentImageTag := strings.Split(deployment.Spec.Template.Spec.Containers[0].Image, ":")[1]
 
@@ -382,16 +387,17 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) error {
 	if console.GetImages().ConsoleTag != existingConsoleDeploymentImageTag {
 		log.Info(fmt.Sprintf("Console Tag is %s and Mustgater tag is %s", console.GetImages().ConsoleTag, existingConsoleDeploymentImageTag))
 
-		// set the webhook image here as well
-		// Specify deployment namespace and name
-
 		webhooknamespace, err := GetNamespaceEndingWith(clientset, "-infra")
 		webhookeploymentname := ""
+
 		if err != nil {
-			webhookeploymentname, err = GetDeploymentEndingWithInNamespace(clientset, webhooknamespace, "-webhook")
+			log.Error(err, "Failed to get Infra Namespace ")
+			return err
 		}
 
-		if err == nil {
+		webhookeploymentname, err = GetDeploymentEndingWithInNamespace(clientset, webhooknamespace, "-webhook")
+
+		if err != nil {
 			log.Error(err, "Failed to get operator namespace")
 			time.Sleep(15 * time.Second)
 			return err
@@ -400,7 +406,8 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) error {
 		// Retrieve the deployment
 		deployment, err := clientset.AppsV1().Deployments(webhooknamespace).Get(context.TODO(), webhookeploymentname, v1.GetOptions{})
 		if err != nil {
-			panic(err.Error())
+			log.Error(err, "Failed to get Webhook Deployment  ")
+			return err
 		}
 		existingwebhookimage := strings.Split(deployment.Spec.Template.Spec.Containers[0].Image, ":")[0]
 		existingwebhookimage = existingwebhookimage + ":" + console.GetImages().ConsoleTag
@@ -410,7 +417,8 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) error {
 		// Update the deployment
 		_, err = clientset.AppsV1().Deployments(webhooknamespace).Update(context.TODO(), deployment, v1.UpdateOptions{})
 		if err != nil {
-			panic(err.Error())
+			log.Error(err, "Failed to Update the Webhook Deployment  ")
+			return err
 		}
 
 		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-console")
