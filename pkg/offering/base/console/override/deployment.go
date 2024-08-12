@@ -189,7 +189,7 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 	resourcesRequest := instance.Spec.Resources
 	if !instance.Spec.UsingRemoteDB() {
 		couchdb := deployment.MustGetContainer(COUCHDB)
-
+		common.SetPodSecurityContext(couchdb)
 		if instance.Spec.ConnectionString != "" {
 			connectionURL, err := url.Parse(instance.Spec.ConnectionString)
 			if err != nil {
@@ -318,6 +318,11 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 		initCommand = "exit 0"
 	}
 	init.SetCommand([]string{"sh", "-c", initCommand})
+
+	// set seccompProfile to RuntimeDefault
+	common.SetPodSecurityContext(console)
+	common.SetPodSecurityContext(deployer)
+	common.SetPodSecurityContext(configtxlator)
 
 	return nil
 }
