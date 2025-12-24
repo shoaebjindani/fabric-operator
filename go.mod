@@ -159,3 +159,10 @@ replace (
 	github.com/onsi/ginkgo/v2 => github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega => github.com/onsi/gomega v1.19.0
 )
+
+replace (
+	github.com/IBM/idemix => github.com/IBM/idemix v0.0.2-0.20231011101252-a4feda90f3f7
+	github.com/IBM/idemix/bccsp/schemes/aries => github.com/IBM/idemix/bccsp/schemes/aries v0.0.0-20231011101252-a4feda90f3f7
+	github.com/IBM/idemix/bccsp/schemes/weak-bb => github.com/IBM/idemix/bccsp/schemes/weak-bb v0.0.0-20231011101252-a4feda90f3f7
+	github.com/IBM/idemix/bccsp/types => github.com/IBM/idemix/bccsp/types v0.0.0-20231011101252-a4feda90f3f7
+)

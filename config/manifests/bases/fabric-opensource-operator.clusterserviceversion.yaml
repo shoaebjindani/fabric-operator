@@ -1813,8 +1813,6 @@ spec:
                     ephemeral-storage: 100Mi
                     memory: 200Mi
                 securityContext:
-                  seccompProfile:
-                    type: RuntimeDefault
                   allowPrivilegeEscalation: false
                   capabilities:
                     add:
@@ -1826,6 +1824,8 @@ spec:
                   readOnlyRootFilesystem: false
                   runAsNonRoot: false
                   runAsUser: 1001
+                  seccompProfile:
+                    type: RuntimeDefault
               securityContext:
                 fsGroup: 2000
                 runAsNonRoot: true
